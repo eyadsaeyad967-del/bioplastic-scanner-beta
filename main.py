@@ -13,7 +13,7 @@ def generate_bioplastic_resource(detected_fruit):
 
     if detected_fruit.lower() == "banana":
         recipe = (
-                BRIGHT_YELLOW + "💡 OPTIMIZED BANANA BIOPLASTIC FORMULA:\n" + RESET +
+                 "💡 OPTIMIZED BANANA BIOPLASTIC FORMULA:\n"
                 "-----------------------------------------\n"
                 "- Organic Material: Chopped & boiled banana peels\n"
                 "- Distilled Water: 50 ml\n"
@@ -25,7 +25,7 @@ def generate_bioplastic_resource(detected_fruit):
         )
     elif detected_fruit.lower() == "apple":
         recipe = (
-                RED + "💡 OPTIMIZED APPLE BIOPLASTIC FORMULA:\n" + RESET +
+                💡 OPTIMIZED APPLE BIOPLASTIC FORMULA:\n"
                 "-----------------------------------------\n"
                 "- Organic Material: Blended apple skins\n"
                 "- Distilled Water: 40 ml\n"
