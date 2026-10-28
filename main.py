@@ -1,3 +1,8 @@
+أبشر يا إياد! فهمت عليك تماماً: **شلت الألف من البداية وأضفت الهاء في النهاية** ليكون الاسم الصحيح بالكامل **"إياد الزرعه"** (Eyad Al-Zarah).
+
+إليك الكود المحدث بالكامل وجاهز للنسخ:
+
+```python
 import streamlit as st
 
 
@@ -128,3 +133,14 @@ if st.button(button_text):
 
     st.write("\n")
     generate_bioplastic_resource(selected_fruit, quantity_input, language)
+
+# --- التوقيع في أخر الصفحة ---
+st.markdown("---")
+st.markdown(
+    "<div style='text-align: center; color: gray; font-size: 14px;'>"
+    "Programmed by Eyad Al-Zarah & Ammar Al-Zahrani | برمجة إياد الزرعه وعمار الزهراني"
+    "</div>",
+    unsafe_allow_html=True
+)
+
+```
