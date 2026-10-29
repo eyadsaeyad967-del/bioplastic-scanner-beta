@@ -95,9 +95,9 @@ language = st.sidebar.selectbox("Choose Language / اختر اللغة", ("Engli
 
 if language == "العربية":
     st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; direction: rtl; display: block;">=== ماسح المخلفات العضوية ===</span>', unsafe_allow_html=True)
-    st.write("ارفع صورة العينة أو الفاتورة، أو اختر يدوياً:")
+    st.write("التقط صورة بالكاميرا أو ارفعها، أو اختر يدوياً:")
     
-    uploaded_image = st.file_uploader("اختر صورة أو القتقطها", type=["jpg", "jpeg", "png"])
+    uploaded_image = st.file_uploader("التقط صورة أو اختر ملفاً", type=["jpg", "jpeg", "png"])
     
     choice_input = st.radio(
         "اختر نوع الفاكهة:",
@@ -107,9 +107,9 @@ if language == "العربية":
     button_text = "توليد الوصفة"
 else:
     st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold;">=== ORGANIC WASTE SCANNER ===</span>', unsafe_allow_html=True)
-    st.write("Upload sample/bill image or select manually:")
+    st.write("Capture/upload photo or select manually:")
     
-    uploaded_image = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
+    uploaded_image = st.file_uploader("Take a photo or choose an image", type=["jpg", "jpeg", "png"])
     
     choice_input = st.radio(
         "Select an option:",
@@ -120,11 +120,11 @@ else:
 
 if uploaded_image is not None:
     if language == "العربية":
-        st.success("📁 تم رفع الصورة بنجاح!")
+        st.success("📸 تم إرفاق الصورة بنجاح!")
     else:
-        st.success("📁 Image uploaded successfully!")
+        st.success("📸 Image attached successfully!")
     
-    st.image(uploaded_image, caption="Uploaded Sample", use_container_width=True)
+    st.image(uploaded_image, caption="Captured/Uploaded Sample", use_container_width=True)
 
 if st.button(button_text):
     if "1" in choice_input:
