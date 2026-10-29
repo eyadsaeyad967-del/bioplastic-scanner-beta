@@ -6,8 +6,8 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
 
     if lang == "العربية":
         fruit_name = "موز" if detected_fruit.lower() == "banana" else "تفاح"
-        st.markdown(BRIGHT_YELLOW + "🤖 [نظام الذكاء الاصطناعي]: يتم فحص عينة المخلفات العضوية..." + RESET, unsafe_allow_html=True)
-        st.markdown(f"✅ [نتيجة الذكاء الاصطناعي]: تم الاكتشاف بنجاح - {quantity}x قشور {fruit_name}", unsafe_allow_html=True)
+        st.markdown(BRIGHT_YELLOW + "🤖 [نظام الذكاء الاصطناعي]: يتم معالجة العينة..." + RESET, unsafe_allow_html=True)
+        st.markdown(f"✅ [نتيجة الذكاء الاصطناعي]: تم الاكتشاف - {quantity}x قشور {fruit_name}", unsafe_allow_html=True)
         st.markdown(BRIGHT_YELLOW + ("=" * 60) + RESET, unsafe_allow_html=True)
 
         if detected_fruit.lower() == "banana":
@@ -47,8 +47,8 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
                 f"👉 الخصائص الناتجة: مرونة عالية، الأفضل للأغطية والشرائح العضوية."
             )
     else:
-        st.markdown(BRIGHT_YELLOW + "🤖 [AI System]: Scanning organic waste sample..." + RESET, unsafe_allow_html=True)
-        st.markdown(f"✅ [AI Result]: Successful Detection - {quantity}x {detected_fruit} Peels", unsafe_allow_html=True)
+        st.markdown(BRIGHT_YELLOW + "🤖 [AI System]: Processing sample..." + RESET, unsafe_allow_html=True)
+        st.markdown(f"✅ [AI Result]: Detected - {quantity}x {detected_fruit} Peels", unsafe_allow_html=True)
         st.markdown(BRIGHT_YELLOW + ("=" * 60) + RESET, unsafe_allow_html=True)
 
         if detected_fruit.lower() == "banana":
@@ -94,35 +94,45 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
 language = st.sidebar.selectbox("Choose Language / اختر اللغة", ("English", "العربية"), index=0)
 
 if language == "العربية":
-    st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; direction: rtl; display: block;">=== ماسح المخلفات العضوية ===</span>', unsafe_allow_html=True)
-    st.write("التقط صورة بالكاميرا، أو اختر يدوياً:")
+    st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; direction: rtl; display: block; text-align: center;">=== ماسح المخلفات العضوية الذكي ===</span>', unsafe_allow_html=True)
+    st.write("الرجاء اختيار طريقة الإدخال المناسبة:")
     
-    camera_image = st.camera_input("التقط صورة بالكاميرا")
-    
-    choice_input = st.radio(
-        "اختر نوع الفاكهة:",
-        ("1. 🍌 موز", "2. 🍎 تفاح")
+    method = st.radio(
+        "اختر الطريقة:",
+        ("1. ⚙️ الاختيار اليدوي (Manual Selection)", "2. 📸 التقاط صورة بالكاميرا (Camera Capture)")
     )
-    quantity_input = st.number_input("أدخل عدد القشور:", min_value=1, value=1, step=1)
-    button_text = "توليد الوصفة"
-else:
-    st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold;">=== ORGANIC WASTE SCANNER ===</span>', unsafe_allow_html=True)
-    st.write("Take a picture with camera or select manually:")
     
-    camera_image = st.camera_input("Take a picture with camera")
-    
-    choice_input = st.radio(
-        "Select an option:",
-        ("1. 🍌 Banana", "2. 🍎 Apple")
-    )
-    quantity_input = st.number_input("Enter number of peels:", min_value=1, value=1, step=1)
-    button_text = "Generate Recipe"
+    if "1" in method:
+        choice_input = st.selectbox("اختر نوع الفاكهة:", ("🍌 موز (Banana)", "🍎 تفاح (Apple)"))
+        quantity_input = st.number_input("أدخل عدد القشور:", min_value=1, value=1, step=1)
+        button_text = "توليد الوصفة"
+    else:
+        camera_image = st.camera_input("التقط صورة العينة")
+        choice_input = st.selectbox("حدد نوع القشور التي تصورت:", ("🍌 موز (Banana)", "🍎 تفاح (Apple)"))
+        quantity_input = st.number_input("أدخل عدد القشور:", min_value=1, value=1, step=1)
+        button_text = "توليد الوصفة من الصورة"
 
-if camera_image is not None:
-    st.image(camera_image, caption="Captured Image", use_container_width=True)
+else:
+    st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; text-align: block;">=== SMART ORGANIC WASTE SCANNER ===</span>', unsafe_allow_html=True)
+    st.write("Please select your preferred input method:")
+    
+    method = st.radio(
+        "Select method:",
+        ("1. ⚙️ Manual Selection", "2. 📸 Camera Capture")
+    )
+    
+    if "1" in method:
+        choice_input = st.selectbox("Select fruit type:", ("🍌 Banana", "🍎 Apple"))
+        quantity_input = st.number_input("Enter number of peels:", min_value=1, value=1, step=1)
+        button_text = "Generate Recipe"
+    else:
+        camera_image = st.camera_input("Take a picture of the sample")
+        choice_input = st.selectbox("Select the detected fruit:", ("🍌 Banana", "🍎 Apple"))
+        quantity_input = st.number_input("Enter number of peels:", min_value=1, value=1, step=1)
+        button_text = "Generate Recipe from Camera"
 
 if st.button(button_text):
-    if "1" in choice_input:
+    if "موز" in choice_input or "Banana" in choice_input:
         selected_fruit = "Banana"
     else:
         selected_fruit = "Apple"
