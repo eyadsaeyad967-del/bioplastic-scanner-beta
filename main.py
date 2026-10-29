@@ -2,6 +2,13 @@ import streamlit as st
 from google import genai
 from PIL import Image
 
+# إعدادات صفحة المتصفح (الاسم والشعار)
+st.set_page_config(
+    page_title="BioPlastic Scanner Beta",
+    page_icon="🌱",
+    layout="centered"
+)
+
 client = genai.Client(api_key="ضع_مفتاح_الجيميني_هنا")
 
 def analyze_image_with_ai(image):
@@ -131,7 +138,7 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
 language = st.sidebar.selectbox("Choose Language / اختر اللغة", ("English", "العربية"), index=1)
 
 if language == "العربية":
-    st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; direction: rtl; display: block; text-align: center;">=== ماسح المخلفات العضوية الذكي ===</span>', unsafe_allow_html=True)
+    st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; direction: rtl; display: block; text-align: center;">=== BioPlastic Scanner Beta ===</span>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; color: #888; font-size: 14px;">إعداد المطورين: إياد الزرعة & عمار الزهراني</p>', unsafe_allow_html=True)
     st.write("الرجاء اختيار طريقة الإدخال:")
     
@@ -150,7 +157,7 @@ if language == "العربية":
         button_text = "تحليل وتوليد الوصفة تلقائياً"
 
 else:
-    st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; text-align: block;">=== SMART ORGANIC WASTE SCANNER ===</span>', unsafe_allow_html=True)
+    st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; text-align: block;">=== BioPlastic Scanner Beta ===</span>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; color: #888; font-size: 14px;">Developers: Eyad Al-Zarah & Ammar Al-Zahrani</p>', unsafe_allow_html=True)
     st.write("Please select your preferred input method:")
     
