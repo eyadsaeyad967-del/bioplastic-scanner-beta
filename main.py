@@ -95,9 +95,9 @@ language = st.sidebar.selectbox("Choose Language / اختر اللغة", ("Engli
 
 if language == "العربية":
     st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; direction: rtl; display: block;">=== ماسح المخلفات العضوية ===</span>', unsafe_allow_html=True)
-    st.write("التقط صورة بالكاميرا أو ارفعها، أو اختر يدوياً:")
+    st.write("التقط صورة بالكاميرا، أو اختر يدوياً:")
     
-    uploaded_image = st.file_uploader("التقط صورة أو اختر ملفاً", type=["jpg", "jpeg", "png"])
+    camera_image = st.camera_input("التقط صورة بالكاميرا")
     
     choice_input = st.radio(
         "اختر نوع الفاكهة:",
@@ -107,9 +107,9 @@ if language == "العربية":
     button_text = "توليد الوصفة"
 else:
     st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold;">=== ORGANIC WASTE SCANNER ===</span>', unsafe_allow_html=True)
-    st.write("Capture/upload photo or select manually:")
+    st.write("Take a picture with camera or select manually:")
     
-    uploaded_image = st.file_uploader("Take a photo or choose an image", type=["jpg", "jpeg", "png"])
+    camera_image = st.camera_input("Take a picture with camera")
     
     choice_input = st.radio(
         "Select an option:",
@@ -118,13 +118,8 @@ else:
     quantity_input = st.number_input("Enter number of peels:", min_value=1, value=1, step=1)
     button_text = "Generate Recipe"
 
-if uploaded_image is not None:
-    if language == "العربية":
-        st.success("📸 تم إرفاق الصورة بنجاح!")
-    else:
-        st.success("📸 Image attached successfully!")
-    
-    st.image(uploaded_image, caption="Captured/Uploaded Sample", use_container_width=True)
+if camera_image is not None:
+    st.image(camera_image, caption="Captured Image", use_container_width=True)
 
 if st.button(button_text):
     if "1" in choice_input:
