@@ -128,10 +128,11 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
     st.text(recipe)
 
 
-language = st.sidebar.selectbox("Choose Language / اختر اللغة", ("English", "العربية"), index=0)
+language = st.sidebar.selectbox("Choose Language / اختر اللغة", ("English", "العربية"), index=1)
 
 if language == "العربية":
     st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; direction: rtl; display: block; text-align: center;">=== ماسح المخلفات العضوية الذكي ===</span>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; color: #888; font-size: 14px;">إعداد المطورين: إياد الزرعة & عمار الزهراني</p>', unsafe_allow_html=True)
     st.write("الرجاء اختيار طريقة الإدخال:")
     
     method = st.radio(
@@ -150,6 +151,7 @@ if language == "العربية":
 
 else:
     st.markdown('<span style="color: #FFD700; font-size: 24px; font-weight: bold; text-align: block;">=== SMART ORGANIC WASTE SCANNER ===</span>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; color: #888; font-size: 14px;">Developers: Eyad Al-Zarah & Ammar Al-Zahrani</p>', unsafe_allow_html=True)
     st.write("Please select your preferred input method:")
     
     method = st.radio(
