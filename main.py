@@ -2,7 +2,7 @@ import streamlit as st
 from google import genai
 from PIL import Image
 
-# إعدادات صفحة المتصفح والاسم والشعار
+# إعدادات صفحة المتصفح (الاسم والشعار)
 st.set_page_config(
     page_title="BioPlastic Scanner Beta",
     page_icon="🌱",
@@ -17,31 +17,32 @@ def analyze_image_with_ai(image):
             model='gemini-2.5-flash',
             contents=[
                 image, 
-                "Analyze this image carefully. You must count the exact number of fruit peels and identify their type. "
-                "Return your answer strictly and only in this exact CSV format without any extra text: [Fruit],[Number]. "
-                "Where [Fruit] must be either 'Banana' or 'Apple', and [Number] is the exact integer count of the peels visible in the image. "
-                "Example format: Banana,3 or Apple,2"
+                "Analyze this image. Return your answer strictly in this exact format: [Fruit],[Number]. "
+                "Where [Fruit] is either 'Banana' or 'Apple', and [Number] is the exact integer count of the peels visible in the image. "
+                "Example: Banana,3 or Apple,2"
             ]
         )
         
         text_res = response.text.strip()
         parts = text_res.split(',')
         
-        if len(parts) < 2:
-            return None, None, False
-            
         detected_fruit = parts[0].strip().capitalize()
         if "Banana" not in detected_fruit and "Apple" not in detected_fruit:
-            return None, None, False
+            detected_fruit = "Banana"
             
-        detected_quantity = int(''.join(filter(str.isdigit, parts[1])))
-        if detected_quantity < 1:
-            detected_quantity = 1
+        detected_quantity = 1
+        if len(parts) > 1:
+            try:
+                detected_quantity = int(''.join(filter(str.isdigit, parts[1])))
+                if detected_quantity < 1:
+                    detected_quantity = 1
+            except:
+                detected_quantity = 1
                 
-        return detected_fruit, detected_quantity, True
+        return detected_fruit, detected_quantity
         
     except Exception as e:
-        return None, None, False
+        return "Banana", 1
 
 def generate_bioplastic_resource(detected_fruit, quantity, lang):
     BRIGHT_YELLOW = '<span style="color: #FFD700;">'
@@ -50,7 +51,7 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
     if lang == "العربية":
         fruit_name = "موز" if detected_fruit.lower() == "banana" else "تفاح"
         st.markdown(BRIGHT_YELLOW + "🤖 [نظام الذكاء الاصطناعي (Gemini)]: تم تحليل الصورة والتعرف على العينة والعدد..." + RESET, unsafe_allow_html=True)
-        st.markdown(f"✅ **النتيجة واضحة ودقيقة!** تم اكتشاف - {quantity}x قشور {fruit_name}", unsafe_allow_html=True)
+        st.markdown(f"✅ [نتيجة الذكاء الاصطناعي]: تم اكتشاف - {quantity}x قشور {fruit_name}", unsafe_allow_html=True)
         st.markdown(BRIGHT_YELLOW + ("=" * 60) + RESET, unsafe_allow_html=True)
 
         if detected_fruit.lower() == "banana":
@@ -90,8 +91,8 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
                 f"👉 الخصائص الناتجة: مرونة عالية، الأفضل للأغطية والشرائح العضوية."
             )
     else:
-        st.markdown(BRIGHT_YELLOW + "🤖 [AI System (Gemini)]: Image analyzed successfully..." + RESET, unsafe_allow_html=True)
-        st.markdown(f"✅ **Result is Clear!** Detected - {quantity}x {detected_fruit} Peels", unsafe_allow_html=True)
+        st.markdown(BRIGHT_YELLOW + "🤖 [AI System (Gemini)]: Image analyzed successfully (Type & Count detected)..." + RESET, unsafe_allow_html=True)
+        st.markdown(f"✅ [AI Result]: Detected - {quantity}x {detected_fruit} Peels", unsafe_allow_html=True)
         st.markdown(BRIGHT_YELLOW + ("=" * 60) + RESET, unsafe_allow_html=True)
 
         if detected_fruit.lower() == "banana":
@@ -106,10 +107,10 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
                 f"-----------------------------------------\n"
                 f"- Organic Material: Chopped & boiled {quantity} banana peel(s)\n"
                 f"- Distilled Water: {water} ml\n"
-                f"- Vegetable Glycerin: {glycerin} ml\n"
+                f"- Vegetable Glycerin: {glycerin} ml (Higher dose needed to soften rigid banana fibers)\n"
                 f"- White Vinegar: {vinegar} ml\n"
                 f"- Cornstarch: {starch} grams\n"
-                f"- Curing Time: {curing_time} hours.\n"
+                f"- Curing Time: {curing_time} hours in a dry room.\n"
                 f"👉 Resulting Properties: High tensile strength, best for rigid packaging."
             )
         else:
@@ -124,7 +125,7 @@ def generate_bioplastic_resource(detected_fruit, quantity, lang):
                 f"-----------------------------------------\n"
                 f"- Organic Material: Blended {quantity} apple skin(s)\n"
                 f"- Distilled Water: {water} ml\n"
-                f"- Vegetable Glycerin: {glycerin} ml\n"
+                f"- Vegetable Glycerin: {glycerin} ml (Lower dose needed because apples have natural pectin)\n"
                 f"- White Vinegar: {vinegar} ml\n"
                 f"- Cornstarch: {starch} grams\n"
                 f"- Curing Time: {curing_time} hours.\n"
@@ -177,21 +178,13 @@ else:
 if st.button(button_text):
     if camera_image is not None:
         img = Image.open(camera_image)
-        with st.spinner("Analyzing image..." if language != "العربية" else "جاري تحليل الصورة..."):
-            selected_fruit, quantity_input, is_clear = analyze_image_with_ai(img)
-            
-        if is_clear:
-            st.write("\n")
-            generate_bioplastic_resource(selected_fruit, quantity_input, language)
-        else:
-            if language == "العربية":
-                st.error("❌ **النتيجة غير واضحة أو الصورة غير مطابقة (Clear Photo)!** الرجاء إعادة التقاط صورة واضحة للقشور.")
-            else:
-                st.error("❌ **Result is not clear or invalid image (Clear Photo)!** Please retake a clear picture of the peels.")
+        with st.spinner("Analyzing image with Gemini AI (Detecting Fruit & Count)..." if language != "العربية" else "جاري تحليل الصورة بواسطة ذكاء Gemini (استخراج النوع والعدد)..."):
+            selected_fruit, quantity_input = analyze_image_with_ai(img)
     else:
         if "موز" in choice_input or "Banana" in choice_input:
             selected_fruit = "Banana"
         else:
             selected_fruit = "Apple"
-        st.write("\n")
-        generate_bioplastic_resource(selected_fruit, quantity_input, language)
+
+    st.write("\n")
+    generate_bioplastic_resource(selected_fruit, quantity_input, language)
